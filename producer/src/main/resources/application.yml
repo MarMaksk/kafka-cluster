@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    # Перечисляем всех наших брокеров
+    bootstrap-servers: host.docker.internal:29092,host.docker.internal:29093
+    producer:
+      # Настраиваем сериализацию сообщений
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+kafka:
+  topics:
+    test-topic: topic1

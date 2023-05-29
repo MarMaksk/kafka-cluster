@@ -1,0 +1,33 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: kafka-example-consumer
+  kafka:
+    # Адреса всех брокеров кластера
+    bootstrap-servers: host.docker.internal:29092,host.docker.internal:29093
+    listener:
+      # Получение каждой записи должно быть подтверждено
+      ack-mode: record
+    producer:
+      client-id: ${spring.application.name}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Очередь для исключений
+      value-serializer: ru.home.kafka.config.DltMessageSerializer
+      retries: 3
+    consumer:
+      group-id: ${spring.application.name}
+      autoOffsetReset: earliest
+      # Сериализаторы для всех типов
+      keyDeserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      valueDeserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+    properties:
+      # Тип, для которого определяем конкретные сериализаторы
+      spring.json.value.default.type: ru.home.kafka.dto.JsonMessage
+      spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+      spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
+kafka:
+  topics:
+    test-topic: topic1
+
